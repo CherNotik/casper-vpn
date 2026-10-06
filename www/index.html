@@ -93,6 +93,16 @@ h4{margin:22px 4px 8px;font-size:12px;font-weight:600;color:var(--mut);letter-sp
 .hint{color:var(--mut);font-size:12.5px;margin-top:14px}
 .lt{position:absolute;top:calc(14px + env(safe-area-inset-top,0px));right:16px}
 .tg{background:#2a9fe0}
+/* Скрывает ползунок скролла во всём приложении */
+main::-webkit-scrollbar,
+.login::-webkit-scrollbar,
+body::-webkit-scrollbar {
+    display: none;
+}
+main, .login, body {
+    scrollbar-width: none;       /* Firefox */
+    -ms-overflow-style: none;    /* IE/Edge */
+}
 </style></head><body>
 <svg width="0" height="0" style="position:absolute"><defs>
 <symbol id="home" viewBox="0 0 24 24"><path d="M4 11l8-6.5 8 6.5M6 9.5V19h12V9.5"/></symbol>
@@ -153,12 +163,14 @@ h4{margin:22px 4px 8px;font-size:12px;font-weight:600;color:var(--mut);letter-sp
 
 <script>
 const $=i=>document.getElementById(i);
-const BOT="YOUR_BOT_USERNAME"; // ← сюда имя вашего бота без @
+const BOT="Casper_VPN_Service_bot";
+const API="https://hearts-duties-figured-jackson.trycloudflare.com";
+
 const L={ru:{welcome:"Добро пожаловать",welcome_sub:"Войдите в свой аккаунт любым удобным способом",m_tg:"Telegram",m_code:"Код",m_link:"Ссылка",tg_btn:"Войти через Telegram",tg_hint:"Откроется бот, нажмите «Старт» и вернитесь в приложение",code_ph:"XXXX-XXXX-XXXX",code_hint:"Личный код есть в боте, в разделе «Мой аккаунт»",link_hint:"Ссылка подписки находится в боте и личном кабинете",paste:"Вставить",enter:"Войти",checking:"Проверяем…",opening:"Открываем Telegram…",err_code:"Код не подошёл. Проверьте его и попробуйте снова.",err_link:"Ссылка не подошла. Проверьте, что скопировали её полностью.",err_paste:"Вставьте ссылку вручную",home:"Главная",settings:"Настройки",off:"Не защищено",on:"Вы под защитой",tap_on:"Нажмите на призрака, чтобы подключиться",tap_off:"нажмите, чтобы отключить",searching:"Ищем лучший путь…",auto:"Авто",fast:"Быстрый",note_auto:"Подключение к серверу, который вы выбрали в списке.",note_fast:"При подключении выбирается сервер с самым низким пингом.",servers:"Серверы",updated:"обновлено",newsrv:"Новый сервер",best:"быстрейший",ms:"мс",manage:"Управление аккаунтом",plan:"Тариф",bought:"Приобретён",until:"Активен до",traffic:"Трафик",gb:"ГБ",of:"из",split:"Раздельное туннелирование",split_pick:"Выбирать приложения",split_sub:"Включено — через VPN, серое — напрямую",search_app:"Найти приложение",leg_via:"Через VPN",leg_dir:"Напрямую",via:"через VPN",direct:"напрямую",more:"Ещё",language:"Язык",support:"Поддержка",support_sub:"Откроется чат с ботом",logout:"Выйти из аккаунта"},
 en:{welcome:"Welcome",welcome_sub:"Sign in to your account any way you like",m_tg:"Telegram",m_code:"Code",m_link:"Link",tg_btn:"Sign in with Telegram",tg_hint:"The bot will open, press Start and come back to the app",code_ph:"XXXX-XXXX-XXXX",code_hint:"Your personal code is in the bot, under “My account”",link_hint:"The subscription link is in the bot and your account page",paste:"Paste",enter:"Sign in",checking:"Checking…",opening:"Opening Telegram…",err_code:"This code doesn't work. Check it and try again.",err_link:"This link doesn't work. Make sure you copied it fully.",err_paste:"Paste the link manually",home:"Home",settings:"Settings",off:"Not protected",on:"You're protected",tap_on:"Tap the ghost to connect",tap_off:"tap to disconnect",searching:"Finding the best route…",auto:"Auto",fast:"Fast",note_auto:"Connects to the server you picked in the list.",note_fast:"Connects to the server with the lowest ping.",servers:"Servers",updated:"updated",newsrv:"New server",best:"fastest",ms:"ms",manage:"Manage account",plan:"Plan",bought:"Purchased",until:"Active until",traffic:"Traffic",gb:"GB",of:"of",split:"Split tunneling",split_pick:"Choose apps",split_sub:"On — via VPN, gray — direct",search_app:"Find an app",leg_via:"Via VPN",leg_dir:"Direct",via:"via VPN",direct:"direct",more:"More",language:"Language",support:"Support",support_sub:"Opens a chat with the bot",logout:"Sign out"}};
 let lang="ru";try{lang=localStorage.getItem("lang")||"ru"}catch(e){}
 const t=k=>L[lang][k]||k;
-let on=false,mode=1,cur=0,split=true,servers=[],user=null,busy=false,lm=0;
+let on=false,mode=1,cur=0,split=true,servers=[],user=null,busy=false,lm=0,subUrl="";
 
 /* призрак */
 const G=`<svg class="gh" viewBox="0 0 100 100"><g class="st2"><path d="M4 22l2 5 5 2-5 2-2 5-2-5-5-2 5-2z"/><path d="M96 34l1.6 4 4 1.6-4 1.6-1.6 4-1.6-4-4-1.6 4-1.6z"/><path d="M90 6l1.2 3 3 1.2-3 1.2-1.2 3-1.2-3-3-1.2 3-1.2z"/></g>
@@ -181,32 +193,54 @@ function flag(cc){let b;const r='<rect width="30" height="20"';
  else b=r+' fill="#8f87ab"/>';
  return `<svg viewBox="0 0 30 20" style="width:36px;height:24px;border-radius:5px;stroke:none;box-shadow:0 0 0 1px rgba(128,120,160,.35)">${b}</svg>`}
 
-/* серверы (в настоящем приложении — из панели по подписке) */
-const PANEL=[["NL","Нидерланды","Netherlands"],["DE","Германия","Germany"],["FI","Финляндия","Finland"],["AT","Австрия","Austria"],["SE","Швеция","Sweden"]];
+/* реальные серверы из API */
+function extractCountry(name){
+ const map={"Финляндия":"FI","Finland":"FI","Германия":"DE","Germany":"DE","Нидерланды":"NL","Netherlands":"NL","Австрия":"AT","Austria":"AT","Швеция":"SE","Sweden":"SE","Польша":"PL","Poland":"PL","Швейцария":"CH","Switzerland":"CH","Испания":"ES","Spain":"ES","Турция":"TR","Turkey":"TR"};
+ for(const[k,v]of Object.entries(map)){if(name.includes(k))return v}
+ return "UN";
+}
+async function loadServers(userId){
+ try{
+  const r=await fetch(`${API}/api/servers/${userId}`);
+  const d=await r.json();
+  if(d.ok&&d.servers&&d.servers.length){
+   servers=d.servers.map(s=>({id:s.id,cc:extractCountry(s.name),n:[s.name,s.name],ping:rnd(),link:s.link}));
+   $("upd").textContent=t("updated")+" "+new Date().toLocaleTimeString().slice(0,5);
+   draw();
+  }else{
+   servers=[];
+   $("srv").innerHTML='<div style="color:var(--mut);padding:20px;text-align:center">Серверы не найдены. Активируйте подписку в боте.</div>';
+  }
+ }catch(e){console.error(e)}
+}
 let seen=new Set();try{seen=new Set(JSON.parse(localStorage.getItem("seen")||"[]"))}catch(e){}
 const save=()=>{try{localStorage.setItem("seen",JSON.stringify([...seen]))}catch(e){}};
 const rnd=()=>Math.round(25+Math.random()*180);
-function pull(list){const first=seen.size==0;
- servers=list.map(p=>({id:p[0],cc:p[0],n:[p[1],p[2]],ping:(servers.find(s=>s.id==p[0])||{}).ping||rnd()}));
- if(first){servers.forEach(s=>seen.add(s.id));save()}
- $("upd").textContent=t("updated")+" "+new Date().toLocaleTimeString().slice(0,5);draw()}
 function measure(){servers.forEach(s=>s.ping=Math.max(8,s.ping+Math.round((Math.random()-.5)*30)));draw()}
 const best=()=>servers.reduce((a,b)=>b.ping<a.ping?b:a,servers[0]);
 const pc=p=>p<70?"var(--ok)":p<130?"var(--wa)":"var(--bd)";
 const nm=s=>s.n[lang=="ru"?0:1];
-function draw(){if(!servers.length)return;const b=best(),o=[...servers.filter(s=>!seen.has(s.id)),...servers.filter(s=>seen.has(s.id))];
- $("srv").innerHTML=o.map(s=>`<div class="srv ${servers[cur].id==s.id?'sel':''} ${s===b?'best':''}" data-id="${s.id}">${flag(s.cc)}<div>${seen.has(s.id)?"":`<span class="new">${t("newsrv")}</span>`}<b data-b="${t("best")}">${nm(s)}</b></div><span class="ping" style="color:${pc(s.ping)}">${s.ping} ${t("ms")}</span></div>`).join("");
+function draw(){if(!servers.length)return;const b=best();
+ $("srv").innerHTML=servers.map(s=>`<div class="srv ${servers[cur]&&servers[cur].id==s.id?'sel':''} ${s===b?'best':''}" data-id="${s.id}">${flag(s.cc)}<div><b data-b="${t("best")}">${nm(s)}</b></div><span class="ping" style="color:${pc(s.ping)}">${s.ping} ${t("ms")}</span></div>`).join("");
  $("srv").querySelectorAll(".srv").forEach(r=>r.onclick=()=>{cur=servers.findIndex(s=>s.id==r.dataset.id);seen.add(r.dataset.id);save();draw();status()})}
 function status(){const p=$("p1");p.classList.toggle("on",on);p.classList.toggle("off",!on);
  $("stt").textContent=on?t("on"):t("off");
  if(!busy)$("sub").textContent=on?`${nm(servers[cur])} · ${servers[cur].ping} ${t("ms")} · ${t("tap_off")}`:t("tap_on");
  $("m0").className=mode==0?"on":"";$("m1").className=mode==1?"on":"";$("mnote").textContent=t(mode==1?"note_fast":"note_auto")}
-$("orb").onclick=()=>{if(busy)return;busy=true;$("p1").classList.add("busy");if(!on)$("sub").textContent=t("searching");
+
+$("orb").onclick=async()=>{if(busy||!user)return;busy=true;$("p1").classList.add("busy");if(!on)$("sub").textContent=t("searching");
+ try{
+  if(!on){
+   const r=await fetch(`${API}/api/connect`,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({user_id:user.id})});
+   const d=await r.json();
+   if(d.ok&&d.link)subUrl=d.link;
+  }
+ }catch(e){console.error(e)}
  setTimeout(()=>{if(!on){measure();if(mode==1)cur=servers.indexOf(best())}on=!on;$("p1").classList.remove("busy");busy=false;draw();status()},1000)};
 $("m0").onclick=()=>{mode=0;status()};$("m1").onclick=()=>{mode=1;status()};
-setInterval(()=>{if(user){measure();if(on)status()}},4000);
+setInterval(()=>{if(user&&servers.length){measure();if(on)status()}},4000);
 
-/* раздельное туннелирование (в настоящем приложении список берётся с телефона) */
+/* раздельное туннелирование */
 const apps=[["Telegram","#6aa5f0"],["YouTube","#e0709a"],["TikTok","#8a6be8"],["WhatsApp","#4fb99a"],["Chrome","#e0a15a"],["Сбербанк","#4fb99a"],["Госуслуги","#6aa5f0"],["Яндекс Браузер","#e0709a"],["Discord","#9b7fe0"],["Spotify","#4fb99a"]];
 const vpn=new Set(["Telegram","YouTube","TikTok","Discord","Chrome"]);
 function da(){const f=$("q").value.toLowerCase();$("apps").innerHTML=apps.filter(a=>a[0].toLowerCase().includes(f)).map(a=>`<div class="app1 ${vpn.has(a[0])?'sel':''}" data-n="${a[0]}"><span class="cc" style="background:${a[1]}">${a[0][0]}</span><b>${a[0]}</b><em>${t(vpn.has(a[0])?"via":"direct")}</em><span class="sw ${vpn.has(a[0])?'on':''}" style="margin:0"></span></div>`).join("");
@@ -220,34 +254,46 @@ function langBtns(){["lang0","lang1"].forEach(id=>{$(id).innerHTML=["ru","en"].m
 function applyLang(){document.documentElement.lang=lang;
  document.querySelectorAll("[data-t]").forEach(e=>e.textContent=t(e.dataset.t));
  document.querySelectorAll("[data-p]").forEach(e=>e.placeholder=t(e.dataset.p));
- langBtns();da();if(servers.length){draw();status();$("upd").textContent=t("updated")+" "+new Date().toLocaleTimeString().slice(0,5)}if(user)renderAcc()}
+ langBtns();da();if(servers.length){draw();status()}$("manage").href=`https://t.me/${BOT}?start=account`;$("support").href=`https://t.me/${BOT}?start=support`;if(user)renderAcc()}
 
-/* аккаунт */
-const PLANS=[["Призрачный старт",1],["Тихий призрак",3],["Король призраков",12]]; // ← названия замените на те, что в вашем боте
-const hash=s=>[...s].reduce((h,c)=>(h*31+c.charCodeAt(0))>>>0,7);
-const fmt=d=>d.toLocaleString(lang=="ru"?"ru-RU":"en-GB",{day:"numeric",month:"long",year:"numeric",hour:"2-digit",minute:"2-digit"});
-function mkUser(m,v){const h=hash(m+v),pl=PLANS[h%3],end=new Date(Date.now()+(20+h%60)*864e5);
- end.setHours(h%24,(h>>3)%60);const buy=new Date(end-pl[1]*30*864e5);
- return{name:m=="tg"?"Алексей":"User_"+v.slice(-4).toUpperCase(),id:m=="tg"?"7012345678":String(100000000+h%900000000),plan:pl[0],buy,end,used:10+h%150,total:200}}
-function renderAcc(){$("av").textContent=user.name[0];$("un").textContent=user.name;$("uid").textContent="ID: "+user.id;
- $("kp").textContent=user.plan;$("kb").textContent=fmt(user.buy);$("ke").textContent=fmt(user.end);
- $("tb").style.width=Math.round(user.used/user.total*100)+"%";$("tt").textContent=`${user.used} ${t("of")} ${user.total} ${t("gb")}`;
- $("manage").href=`https://t.me/${BOT}?start=account`;$("support").href=`https://t.me/${BOT}?start=support`}
-function enter(m,v){user=mkUser(m,v);renderAcc();$("login").classList.add("hide");$("appw").classList.remove("hide");pull(PANEL);status()}
+/* аккаунт — реальные данные из API */
+const fmt=d=>{try{return new Date(d).toLocaleString(lang=="ru"?"ru-RU":"en-GB",{day:"numeric",month:"long",year:"numeric",hour:"2-digit",minute:"2-digit"})}catch(e){return d}};
+function renderAcc(){
+ $("av").textContent=(user.name||"U")[0].toUpperCase();
+ $("un").textContent=user.name||"User";
+ $("uid").textContent="ID: "+user.id;
+ $("kp").textContent=user.plan||"—";
+ $("kb").textContent=fmt(user.bought_at||user.expires_at);
+ $("ke").textContent=fmt(user.expires_at);
+ const used=user.traffic_used||0,total=user.traffic_total||200;
+ $("tb").style.width=Math.min(100,Math.round(used/total*100))+"%";
+ $("tt").textContent=`${used.toFixed(2)} ${t("of")} ${total} ${t("gb")}`;
+}
 const wait=ms=>new Promise(r=>setTimeout(r,ms));
-async function login(m,v,silent){const b=document.querySelector(m=="tg"?"#tgb":`[data-go="${m=="code"?1:2}"]`),tx=b.firstElementChild||b,old=tx.textContent;
- $("err").textContent="";b.disabled=true;tx.textContent=t(m=="tg"?"opening":"checking");await wait(m=="tg"?1300:700);b.disabled=false;tx.textContent=old;
- // В настоящем приложении здесь запрос к вашему серверу/панели, он подтверждает вход
- const ok=m=="tg"||(m=="code"?v.replace(/\W/g,"").length==12:(()=>{try{const x=new URL(v.trim());return x.protocol=="https:"&&x.pathname.length>6}catch(e){return false}})());
- if(!ok){if(!silent)$("err").textContent=t(m=="code"?"err_code":"err_link");return}
- try{localStorage.setItem("auth",JSON.stringify([m,v]))}catch(e){}enter(m,v)}
+async function login(m,v,silent){
+ const b=document.querySelector(m=="tg"?"#tgb":`[data-go="${m=="code"?1:2}"]`),tx=b.firstElementChild||b,old=tx.textContent;
+ $("err").textContent="";b.disabled=true;tx.textContent=t(m=="tg"?"opening":"checking");
+ try{
+  const r=await fetch(`${API}/api/login`,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({method:m,value:v})});
+  if(!r.ok){if(!silent)$("err").textContent=t(m=="code"?"err_code":"err_link");return}
+  const d=await r.json();
+  if(!d.ok){if(!silent)$("err").textContent=t(m=="code"?"err_code":"err_link");return}
+  user=d.user;subUrl=d.sub_url||"";
+  try{localStorage.setItem("auth",JSON.stringify([m,v]))}catch(e){}
+  $("login").classList.add("hide");$("appw").classList.remove("hide");
+  renderAcc();
+  await loadServers(user.id);
+  status();
+ }catch(e){if(!silent)$("err").textContent="Ошибка сети: "+e.message}
+ finally{b.disabled=false;tx.textContent=old}
+}
 $("tgb").onclick=()=>login("tg","");
 document.querySelectorAll("[data-go]").forEach(b=>b.onclick=()=>login(b.dataset.go==1?"code":"link",b.dataset.go==1?$("code").value:$("lnk").value));
 $("code").oninput=e=>{const v=e.target.value.replace(/[^a-z0-9]/gi,"").toUpperCase().slice(0,12);e.target.value=v.match(/.{1,4}/g)?.join("-")||""};
 $("paste").onclick=async()=>{try{$("lnk").value=await navigator.clipboard.readText()}catch(e){$("err").textContent=t("err_paste")}};
 function ltab(n){lm=n;$("err").textContent="";[0,1,2].forEach(i=>{$("pn"+i).classList.toggle("hide",i!=n);document.querySelector(`#ltabs [data-m="${i}"]`).className=i==n?"on":""})}
 document.querySelectorAll("#ltabs button").forEach(b=>b.onclick=()=>ltab(+b.dataset.m));
-$("logout").onclick=()=>{try{localStorage.removeItem("auth")}catch(e){}on=false;user=null;tab(1);status();$("appw").classList.add("hide");$("login").classList.remove("hide")};
+$("logout").onclick=()=>{try{localStorage.removeItem("auth")}catch(e){}on=false;user=null;servers=[];tab(1);status();$("appw").classList.add("hide");$("login").classList.remove("hide")};
 function tab(n){$("p1").classList.toggle("hide",n!=1);$("p2").classList.toggle("hide",n!=2);$("n1").className="nb"+(n==1?" on":"");$("n2").className="nb"+(n==2?" on":"")}
 $("n1").onclick=()=>tab(1);$("n2").onclick=()=>tab(2);
 
