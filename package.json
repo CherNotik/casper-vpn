@@ -4,7 +4,9 @@
   "description": "Casper VPN",
   "author": "Casper VPN",
   "main": "electron/main.js",
-  "scripts": { "start": "electron ." },
+  "scripts": {
+    "start": "electron ."
+  },
   "dependencies": {
     "@capacitor/android": "^6.0.0",
     "@capacitor/cli": "^6.0.0",
@@ -17,7 +19,21 @@
   "build": {
     "appId": "com.casper.vpn",
     "productName": "Casper VPN",
-    "files": ["electron/**", "www/**"],
-    "win": { "target": ["portable"] }
+    "files": [
+      "electron/**",
+      "www/**"
+    ],
+    "extraResources": [
+      {
+        "from": "bin",
+        "to": "bin"
+      }
+    ],
+    "win": {
+      "target": [
+        "portable"
+      ],
+      "requestedExecutionLevel": "requireAdministrator"
+    }
   }
 }
