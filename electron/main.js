@@ -3,10 +3,12 @@ const { spawn, execFile } = require("child_process");
 const path = require("path");
 const fs = require("fs");
 const net = require("net");
+const os = require("os");
+const crypto = require("crypto");
 const core = require("./core");
 
-// Адрес сервера, где работает ваш бот (порт 8080). Замените YOUR_SERVER на IP или домен VPS.
-const API_BASE = process.env.CASPER_API || "http://13.141.51.50:8080";
+// Адрес сервера, где работает ваш бот (порт 8080). Домен указывает на VPS с ботом (через Caddy -> порт 8080).
+const API_BASE = process.env.CASPER_API || "https://api.casper.cloud-ip.cc";
 let child = null, lastLog = "";
 const singbox = () => app.isPackaged
   ? path.join(process.resourcesPath, "bin", "sing-box.exe")
@@ -14,7 +16,7 @@ const singbox = () => app.isPackaged
 
 function create() {
   const w = new BrowserWindow({
-    width: 460, height: 820, minWidth: 360, minHeight: 600,
+    width: 1100, height: 720, minWidth: 900, minHeight: 600, center: true,
     backgroundColor: "#15121d", autoHideMenuBar: true, title: "Casper VPN",
     webPreferences: { preload: path.join(__dirname, "preload.js"), contextIsolation: true },
   });
@@ -34,12 +36,21 @@ ipcMain.handle("sub:fetch", async (_e, url) => {
   } catch (e) { return { ok: false, error: String(e.message || e) }; }
 });
 
+// Постоянный номер этого устройства (нужен для списка устройств в аккаунте)
+function deviceInfo() {
+  const f = path.join(app.getPath("userData"), "device.json");
+  let id;
+  try { id = JSON.parse(fs.readFileSync(f, "utf8")).id; } catch (e) {}
+  if (!id) { id = crypto.randomUUID(); try { fs.writeFileSync(f, JSON.stringify({ id })); } catch (e) {} }
+  return { id, name: "Windows · " + os.hostname() };
+}
+
 // Запросы к API вашего бота (вход по коду/Telegram, данные аккаунта)
 ipcMain.handle("api", async (_e, method, p, body, token) => {
   try {
     const r = await fetch(API_BASE + "/api/app" + p, {
       method, signal: AbortSignal.timeout(15000),
-      headers: { "Content-Type": "application/json", ...(token ? { Authorization: "Bearer " + token } : {}) },
+      headers: { "Content-Type": "application/json", "X-Device-Id": deviceInfo().id, "X-Device-Name": encodeURIComponent(deviceInfo().name), ...(token ? { Authorization: "Bearer " + token } : {}) },
       body: body ? JSON.stringify(body) : undefined,
     });
     return { ok: r.ok, status: r.status, data: await r.json().catch(() => ({})) };

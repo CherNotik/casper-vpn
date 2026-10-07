@@ -27,7 +27,7 @@ function parseVless(link) {
 }
 
 // Страна по эмодзи-флагу в названии сервера (🇳🇱 -> NL) и по названию
-const NAMES = { NL: ["netherlands", "нидерланд", "holland"], DE: ["germany", "герман"], FI: ["finland", "финлянд"], AT: ["austria", "австри"], SE: ["sweden", "швец"], PL: ["poland", "польш"], US: ["usa", "united states", "сша"], GB: ["united kingdom", "британ", "london"], FR: ["france", "франц"], TR: ["turkey", "турц"], KZ: ["kazakh", "казах"] };
+const NAMES = { NL: ["netherlands", "нидерланд", "holland"], DE: ["germany", "герман"], FI: ["finland", "финлянд"], AT: ["austria", "австри"], SE: ["sweden", "швец"], PL: ["poland", "польш"], US: ["usa", "united states", "сша"], GB: ["united kingdom", "британ", "london"], FR: ["france", "франц"], TR: ["turkey", "турц"], KZ: ["kazakh", "казах"], CH: ["switzerland", "швейцар"] };
 function countryOf(name) {
   const cps = [...name].map((c) => c.codePointAt(0)).filter((c) => c >= 0x1f1e6 && c <= 0x1f1ff);
   if (cps.length >= 2) return String.fromCharCode(cps[0] - 0x1f1e6 + 65, cps[1] - 0x1f1e6 + 65);
