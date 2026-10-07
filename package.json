@@ -19,6 +19,9 @@
   "build": {
     "appId": "com.casper.vpn",
     "productName": "Casper VPN",
+    "directories": {
+      "buildResources": "build"
+    },
     "files": [
       "electron/**",
       "www/**"
@@ -31,9 +34,19 @@
     ],
     "win": {
       "target": [
-        "portable"
+        "nsis"
       ],
+      "icon": "build/icon.ico",
       "requestedExecutionLevel": "requireAdministrator"
+    },
+    "nsis": {
+      "oneClick": false,
+      "perMachine": true,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "Casper VPN",
+      "artifactName": "Casper-VPN-Setup.${ext}"
     }
   }
 }

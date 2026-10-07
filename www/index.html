@@ -2,6 +2,7 @@
 <html lang="ru"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Casper VPN</title>
+<link rel="icon" href="icon.png">
 <style>
 :root{--bg:#15121d;--s1:#1d1928;--s2:#292338;--ln:#2f2842;--tx:#ece8f7;--mut:#8f87ab;--ac:#a78bfa;--ac2:#7c5cf0;--ok:#7ee0b5;--wa:#e8c47a;--bd:#e48a9b;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
 @media(prefers-color-scheme:light){:root:not([data-theme="dark"]){--bg:#f6f3fc;--s1:#fff;--s2:#ece7f8;--ln:#e2dbf3;--tx:#241d3a;--mut:#7a7196;--ac:#7c5cf0;--ac2:#6a49e0;--ok:#1fa97a;--wa:#b98a1f;--bd:#c9506a}}
@@ -148,7 +149,7 @@ main{padding:32px 44px}
 </section>
 
 <section id="p2" class="hide">
-  <div class="acc"><div class="top"><div class="ava" id="av"></div><div><div class="nm" id="un"></div><div class="id" id="uid"></div></div></div>
+  <div class="acc"><div class="top"><div class="ava" id="av"></div><div><div class="nm" id="un"></div><div class="id" id="uun" style="color:var(--ac)"></div><div class="id" id="uid"></div></div></div>
     <a class="btn" id="manage" target="_blank" rel="noopener" data-t="manage"></a></div>
   <div style="margin-top:8px">
     <div class="kv"><span data-t="plan"></span><b id="kp"></b></div>
@@ -275,8 +276,8 @@ const hash=s=>[...s].reduce((h,c)=>(h*31+c.charCodeAt(0))>>>0,7);
 const fmt=d=>d.toLocaleString(lang=="ru"?"ru-RU":"en-GB",{day:"numeric",month:"long",year:"numeric",hour:"2-digit",minute:"2-digit"});
 function mkUser(m,v){const h=hash(m+v),pl=PLANS[h%3],end=new Date(Date.now()+(20+h%60)*864e5);
  end.setHours(h%24,(h>>3)%60);const buy=new Date(end-pl[1]*30*864e5);
- return{name:m=="tg"?"Алексей":"User_"+v.slice(-4).toUpperCase(),id:m=="tg"?"7012345678":String(100000000+h%900000000),plan:pl[0],buy,end,used:10+h%150,total:200}}
-function renderAcc(){$("av").textContent=user.name[0];$("un").textContent=user.name;$("uid").textContent=user.id?"ID: "+user.id:"";
+ return{tg:m=="tg"?"alexey_demo":"",name:m=="tg"?"Алексей":"User_"+v.slice(-4).toUpperCase(),id:m=="tg"?"7012345678":String(100000000+h%900000000),plan:pl[0],buy,end,used:10+h%150,total:200}}
+function renderAcc(){$("av").textContent=user.name[0];$("un").textContent=user.name;$("uun").textContent=user.tg?"@"+user.tg:"";$("uid").textContent=user.id?"ID: "+user.id:"";
  $("kp").parentElement.classList.toggle("hide",!!user.slim);$("kb").parentElement.classList.toggle("hide",!!user.slim);
  $("kp").textContent=user.plan;$("kb").textContent=user.buy?fmt(user.buy):"";$("ke").textContent=user.end?fmt(user.end):"—";
  $("tb").parentElement.classList.toggle("hide",!user.total);$("tb").style.width=user.total?Math.min(100,Math.round(user.used/user.total*100))+"%":"0%";
@@ -288,7 +289,7 @@ const mk=r=>r.servers.map(x=>[x.cc,x.name,x.name,x.link,x.host,x.port,x.id]);
 async function finishToken(token){const me=await casper.api("GET","/me",null,token);if(!me.ok||!me.data.ok)return null;const d=me.data;
  if(!d.sub_link){$("err").textContent=t("err_link");return null}
  const r=await casper.fetchSub(d.sub_link);if(!r.ok||!r.servers.length){$("err").textContent=t("err_net");return null}
- return{token,name:d.name,id:String(d.id),plan:d.plan,buy:d.purchased_at?new Date(d.purchased_at):null,end:d.expires_at?new Date(d.expires_at):null,used:+(r.info.used/1e9).toFixed(1),total:Math.round(r.info.total/1e9),list:mk(r)}}
+ return{token,name:d.name,tg:d.username||"",id:String(d.id),plan:d.plan,buy:d.purchased_at?new Date(d.purchased_at):null,end:d.expires_at?new Date(d.expires_at):null,used:+(r.info.used/1e9).toFixed(1),total:Math.round(r.info.total/1e9),list:mk(r)}}
 async function tokenLogin(m,v,tx){let token=null;
  if(m=="code"){const r=await casper.api("POST","/login/code",{code:v});if(r.ok&&r.data.ok)token=r.data.token;else{$("err").textContent=t(r.status==0?"err_api":"err_code");return null}}
  else{const s=await casper.api("POST","/login/tg/start");if(!s.ok){$("err").textContent=t("err_api");return null}

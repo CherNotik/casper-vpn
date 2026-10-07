@@ -17,7 +17,7 @@ const singbox = () => app.isPackaged
 function create() {
   const w = new BrowserWindow({
     width: 1100, height: 720, minWidth: 900, minHeight: 600, center: true,
-    backgroundColor: "#15121d", autoHideMenuBar: true, title: "Casper VPN",
+    backgroundColor: "#15121d", icon: path.join(__dirname, "..", "www", "icon.png"), autoHideMenuBar: true, title: "Casper VPN",
     webPreferences: { preload: path.join(__dirname, "preload.js"), contextIsolation: true },
   });
   w.loadFile(path.join(__dirname, "..", "www", "index.html"));
