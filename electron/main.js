@@ -5,6 +5,8 @@ const fs = require("fs");
 const net = require("net");
 const core = require("./core");
 
+// Адрес сервера, где работает ваш бот (порт 8080). Замените YOUR_SERVER на IP или домен VPS.
+const API_BASE = process.env.CASPER_API || "http://13.141.51.50:8080";
 let child = null, lastLog = "";
 const singbox = () => app.isPackaged
   ? path.join(process.resourcesPath, "bin", "sing-box.exe")
@@ -30,6 +32,18 @@ ipcMain.handle("sub:fetch", async (_e, url) => {
     if (title.startsWith("base64:")) title = Buffer.from(title.slice(7), "base64").toString("utf8");
     return { ok: true, servers, info: core.parseUserInfo(r.headers.get("subscription-userinfo")), title };
   } catch (e) { return { ok: false, error: String(e.message || e) }; }
+});
+
+// Запросы к API вашего бота (вход по коду/Telegram, данные аккаунта)
+ipcMain.handle("api", async (_e, method, p, body, token) => {
+  try {
+    const r = await fetch(API_BASE + "/api/app" + p, {
+      method, signal: AbortSignal.timeout(15000),
+      headers: { "Content-Type": "application/json", ...(token ? { Authorization: "Bearer " + token } : {}) },
+      body: body ? JSON.stringify(body) : undefined,
+    });
+    return { ok: r.ok, status: r.status, data: await r.json().catch(() => ({})) };
+  } catch (e) { return { ok: false, status: 0, data: {} }; }
 });
 
 // Пинг = время установки TCP-соединения с сервером

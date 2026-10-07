@@ -153,9 +153,9 @@ h4{margin:22px 4px 8px;font-size:12px;font-weight:600;color:var(--mut);letter-sp
 
 <script>
 const $=i=>document.getElementById(i);
-const BOT="YOUR_BOT_USERNAME"; // ← сюда имя вашего бота без @
-const L={ru:{welcome:"Добро пожаловать",welcome_sub:"Войдите в свой аккаунт любым удобным способом",m_tg:"Telegram",m_code:"Код",m_link:"Ссылка",tg_btn:"Войти через Telegram",tg_hint:"Откроется бот, нажмите «Старт» и вернитесь в приложение",code_ph:"XXXX-XXXX-XXXX",code_hint:"Личный код есть в боте, в разделе «Мой аккаунт»",link_hint:"Ссылка подписки находится в боте и личном кабинете",paste:"Вставить",enter:"Войти",checking:"Проверяем…",opening:"Открываем Telegram…",err_code:"Код не подошёл. Проверьте его и попробуйте снова.",err_link:"Ссылка не подошла. Проверьте, что скопировали её полностью.",err_paste:"Вставьте ссылку вручную",err_soon:"Этот способ появится позже. Пока используйте ссылку подписки.",err_net:"Нет связи с панелью",err_conn:"Не удалось подключиться",home:"Главная",settings:"Настройки",off:"Не защищено",on:"Вы под защитой",tap_on:"Нажмите на призрака, чтобы подключиться",tap_off:"нажмите, чтобы отключить",searching:"Ищем лучший путь…",auto:"Авто",fast:"Быстрый",note_auto:"Подключение к серверу, который вы выбрали в списке.",note_fast:"При подключении выбирается сервер с самым низким пингом.",servers:"Серверы",updated:"обновлено",newsrv:"Новый сервер",best:"быстрейший",ms:"мс",manage:"Управление аккаунтом",plan:"Тариф",bought:"Приобретён",until:"Активен до",traffic:"Трафик",gb:"ГБ",of:"из",split:"Раздельное туннелирование",split_pick:"Выбирать приложения",split_sub:"Включено — через VPN, серое — напрямую",search_app:"Найти приложение",leg_via:"Через VPN",leg_dir:"Напрямую",via:"через VPN",direct:"напрямую",more:"Ещё",language:"Язык",support:"Поддержка",support_sub:"Откроется чат с ботом",logout:"Выйти из аккаунта"},
-en:{welcome:"Welcome",welcome_sub:"Sign in to your account any way you like",m_tg:"Telegram",m_code:"Code",m_link:"Link",tg_btn:"Sign in with Telegram",tg_hint:"The bot will open, press Start and come back to the app",code_ph:"XXXX-XXXX-XXXX",code_hint:"Your personal code is in the bot, under “My account”",link_hint:"The subscription link is in the bot and your account page",paste:"Paste",enter:"Sign in",checking:"Checking…",opening:"Opening Telegram…",err_code:"This code doesn't work. Check it and try again.",err_link:"This link doesn't work. Make sure you copied it fully.",err_paste:"Paste the link manually",err_soon:"This method is coming later. Use the subscription link for now.",err_net:"Cannot reach the panel",err_conn:"Could not connect",home:"Home",settings:"Settings",off:"Not protected",on:"You're protected",tap_on:"Tap the ghost to connect",tap_off:"tap to disconnect",searching:"Finding the best route…",auto:"Auto",fast:"Fast",note_auto:"Connects to the server you picked in the list.",note_fast:"Connects to the server with the lowest ping.",servers:"Servers",updated:"updated",newsrv:"New server",best:"fastest",ms:"ms",manage:"Manage account",plan:"Plan",bought:"Purchased",until:"Active until",traffic:"Traffic",gb:"GB",of:"of",split:"Split tunneling",split_pick:"Choose apps",split_sub:"On — via VPN, gray — direct",search_app:"Find an app",leg_via:"Via VPN",leg_dir:"Direct",via:"via VPN",direct:"direct",more:"More",language:"Language",support:"Support",support_sub:"Opens a chat with the bot",logout:"Sign out"}};
+const BOT="Casper_VPN_Service_bot";
+const L={ru:{welcome:"Добро пожаловать",welcome_sub:"Войдите в свой аккаунт любым удобным способом",m_tg:"Telegram",m_code:"Код",m_link:"Ссылка",tg_btn:"Войти через Telegram",tg_hint:"Откроется бот, нажмите «Старт» и вернитесь в приложение",code_ph:"XXXX-XXXX-XXXX",code_hint:"Личный код выдаёт бот по команде /code",link_hint:"Ссылка подписки находится в боте и личном кабинете",paste:"Вставить",enter:"Войти",checking:"Проверяем…",opening:"Открываем Telegram…",err_code:"Код не подошёл. Проверьте его и попробуйте снова.",err_link:"Ссылка не подошла. Проверьте, что скопировали её полностью.",err_paste:"Вставьте ссылку вручную",waiting:"Ждём подтверждения в Telegram…",err_api:"Нет связи с сервером",err_expired:"Время входа истекло. Попробуйте ещё раз.",err_soon:"Этот способ появится позже. Пока используйте ссылку подписки.",err_net:"Нет связи с панелью",err_conn:"Не удалось подключиться",home:"Главная",settings:"Настройки",off:"Не защищено",on:"Вы под защитой",tap_on:"Нажмите на призрака, чтобы подключиться",tap_off:"нажмите, чтобы отключить",searching:"Ищем лучший путь…",auto:"Авто",fast:"Быстрый",note_auto:"Подключение к серверу, который вы выбрали в списке.",note_fast:"При подключении выбирается сервер с самым низким пингом.",servers:"Серверы",updated:"обновлено",newsrv:"Новый сервер",best:"быстрейший",ms:"мс",manage:"Управление аккаунтом",plan:"Тариф",bought:"Приобретён",until:"Активен до",traffic:"Трафик",gb:"ГБ",of:"из",split:"Раздельное туннелирование",split_pick:"Выбирать приложения",split_sub:"Включено — через VPN, серое — напрямую",search_app:"Найти приложение",leg_via:"Через VPN",leg_dir:"Напрямую",via:"через VPN",direct:"напрямую",more:"Ещё",language:"Язык",support:"Поддержка",support_sub:"Откроется чат с ботом",logout:"Выйти из аккаунта"},
+en:{welcome:"Welcome",welcome_sub:"Sign in to your account any way you like",m_tg:"Telegram",m_code:"Code",m_link:"Link",tg_btn:"Sign in with Telegram",tg_hint:"The bot will open, press Start and come back to the app",code_ph:"XXXX-XXXX-XXXX",code_hint:"Your personal code is given by the bot with the /code command",link_hint:"The subscription link is in the bot and your account page",paste:"Paste",enter:"Sign in",checking:"Checking…",opening:"Opening Telegram…",err_code:"This code doesn't work. Check it and try again.",err_link:"This link doesn't work. Make sure you copied it fully.",err_paste:"Paste the link manually",waiting:"Waiting for Telegram confirmation…",err_api:"Cannot reach the server",err_expired:"Sign-in expired. Try again.",err_soon:"This method is coming later. Use the subscription link for now.",err_net:"Cannot reach the panel",err_conn:"Could not connect",home:"Home",settings:"Settings",off:"Not protected",on:"You're protected",tap_on:"Tap the ghost to connect",tap_off:"tap to disconnect",searching:"Finding the best route…",auto:"Auto",fast:"Fast",note_auto:"Connects to the server you picked in the list.",note_fast:"Connects to the server with the lowest ping.",servers:"Servers",updated:"updated",newsrv:"New server",best:"fastest",ms:"ms",manage:"Manage account",plan:"Plan",bought:"Purchased",until:"Active until",traffic:"Traffic",gb:"GB",of:"of",split:"Split tunneling",split_pick:"Choose apps",split_sub:"On — via VPN, gray — direct",search_app:"Find an app",leg_via:"Via VPN",leg_dir:"Direct",via:"via VPN",direct:"direct",more:"More",language:"Language",support:"Support",support_sub:"Opens a chat with the bot",logout:"Sign out"}};
 let lang="ru";try{lang=localStorage.getItem("lang")||"ru"}catch(e){}
 const t=k=>L[lang][k]||k;
 const REAL=!!window.casper;
@@ -240,27 +240,39 @@ function mkUser(m,v){const h=hash(m+v),pl=PLANS[h%3],end=new Date(Date.now()+(20
  end.setHours(h%24,(h>>3)%60);const buy=new Date(end-pl[1]*30*864e5);
  return{name:m=="tg"?"Алексей":"User_"+v.slice(-4).toUpperCase(),id:m=="tg"?"7012345678":String(100000000+h%900000000),plan:pl[0],buy,end,used:10+h%150,total:200}}
 function renderAcc(){$("av").textContent=user.name[0];$("un").textContent=user.name;$("uid").textContent=user.id?"ID: "+user.id:"";
- $("kp").parentElement.classList.toggle("hide",!!user.real);$("kb").parentElement.classList.toggle("hide",!!user.real);
+ $("kp").parentElement.classList.toggle("hide",!!user.slim);$("kb").parentElement.classList.toggle("hide",!!user.slim);
  $("kp").textContent=user.plan;$("kb").textContent=user.buy?fmt(user.buy):"";$("ke").textContent=user.end?fmt(user.end):"—";
  $("tb").style.width=user.total?Math.min(100,Math.round(user.used/user.total*100))+"%":"0%";
  $("tt").textContent=user.total?`${user.used} ${t("of")} ${user.total} ${t("gb")}`:`${user.used} ${t("gb")}`;
  $("manage").href=`https://t.me/${BOT}?start=account`;$("support").href=`https://t.me/${BOT}?start=support`}
 function enter(m,v,real){user=real||mkUser(m,v);renderAcc();$("login").classList.add("hide");$("appw").classList.remove("hide");pull(real?real.list:PANEL);status();loadApps();if(REAL)measure()}
 const wait=ms=>new Promise(r=>setTimeout(r,ms));
+const mk=r=>r.servers.map(x=>[x.cc,x.name,x.name,x.link,x.host,x.port]);
+async function finishToken(token){const me=await casper.api("GET","/me",null,token);if(!me.ok||!me.data.ok)return null;const d=me.data;
+ if(!d.sub_link){$("err").textContent=t("err_link");return null}
+ const r=await casper.fetchSub(d.sub_link);if(!r.ok||!r.servers.length){$("err").textContent=t("err_net");return null}
+ return{token,name:d.name,id:String(d.id),plan:d.plan,buy:d.purchased_at?new Date(d.purchased_at):null,end:d.expires_at?new Date(d.expires_at):null,used:+(r.info.used/1e9).toFixed(1),total:Math.round(r.info.total/1e9),list:mk(r)}}
+async function tokenLogin(m,v,tx){let token=null;
+ if(m=="code"){const r=await casper.api("POST","/login/code",{code:v});if(r.ok&&r.data.ok)token=r.data.token;else{$("err").textContent=t(r.status==0?"err_api":"err_code");return null}}
+ else{const s=await casper.api("POST","/login/tg/start");if(!s.ok){$("err").textContent=t("err_api");return null}
+  window.open(`https://t.me/${BOT}?start=login_${s.data.nonce}`,"_blank");tx.textContent=t("waiting");
+  for(let i=0;i<150&&!token;i++){await wait(2000);const p=await casper.api("GET","/login/tg/poll?nonce="+s.data.nonce);if(p.ok&&p.data.ok)token=p.data.token;else if(p.status==404)break}
+  if(!token){$("err").textContent=t("err_expired");return null}}
+ const u=await finishToken(token);if(!u&&!$("err").textContent)$("err").textContent=t("err_api");return u}
 async function login(m,v,silent){const b=document.querySelector(m=="tg"?"#tgb":`[data-go="${m=="code"?1:2}"]`),tx=b.firstElementChild||b,old=tx.textContent;
  $("err").textContent="";b.disabled=true;tx.textContent=t(m=="tg"?"opening":"checking");
  let ok=false,real=null;
  if(REAL){
-  if(m!="link"){await wait(500);if(!silent)$("err").textContent=t("err_soon")}
+  if(m=="code"||m=="tg"){real=await tokenLogin(m,v,tx);ok=!!real}
   else{const r=await casper.fetchSub(v.trim());
-   if(r.ok&&r.servers.length){ok=true;real={name:r.title||"Casper VPN",id:"",real:true,end:r.info.expire?new Date(r.info.expire):null,used:+(r.info.used/1e9).toFixed(1),total:Math.round(r.info.total/1e9),list:r.servers.map(x=>[x.cc,x.name,x.name,x.link,x.host,x.port])}}
+   if(r.ok&&r.servers.length){ok=true;real={name:r.title||"Casper VPN",id:"",slim:true,end:r.info.expire?new Date(r.info.expire):null,used:+(r.info.used/1e9).toFixed(1),total:Math.round(r.info.total/1e9),list:r.servers.map(x=>[x.cc,x.name,x.name,x.link,x.host,x.port])}}
    else if(!silent)$("err").textContent=r.ok?t("err_link"):t("err_net")+" ("+r.error+")"}
  }else{
   await wait(m=="tg"?1300:700);
   ok=m=="tg"||(m=="code"?v.replace(/\W/g,"").length==12:(()=>{try{const x=new URL(v.trim());return x.protocol=="https:"&&x.pathname.length>6}catch(e){return false}})());
   if(!ok&&!silent)$("err").textContent=t(m=="code"?"err_code":"err_link")}
  b.disabled=false;tx.textContent=old;if(!ok)return;
- try{localStorage.setItem("auth",JSON.stringify([m,v]))}catch(e){}enter(m,v,real)}
+ try{localStorage.setItem("auth",JSON.stringify(real&&real.token?["tok",real.token]:[m,v]))}catch(e){}enter(m,v,real)}
 $("tgb").onclick=()=>login("tg","");
 document.querySelectorAll("[data-go]").forEach(b=>b.onclick=()=>login(b.dataset.go==1?"code":"link",b.dataset.go==1?$("code").value:$("lnk").value));
 $("code").oninput=e=>{const v=e.target.value.replace(/[^a-z0-9]/gi,"").toUpperCase().slice(0,12);e.target.value=v.match(/.{1,4}/g)?.join("-")||""};
@@ -271,7 +283,7 @@ $("logout").onclick=()=>{if(REAL)casper.disconnect();try{localStorage.removeItem
 function tab(n){$("p1").classList.toggle("hide",n!=1);$("p2").classList.toggle("hide",n!=2);$("n1").className="nb"+(n==1?" on":"");$("n2").className="nb"+(n==2?" on":"")}
 $("n1").onclick=()=>tab(1);$("n2").onclick=()=>{tab(2);loadApps()};
 
-ltab(REAL?2:0);applyLang();
+ltab(0);applyLang();
 let a=null;try{a=JSON.parse(localStorage.getItem("auth"))}catch(e){}
-if(a)login(a[0],a[1],true);
+if(a){if(a[0]=="tok"&&REAL)finishToken(a[1]).then(u=>{if(u)enter("tok",a[1],u)});else login(a[0],a[1],true)}
 </script></body></html>
